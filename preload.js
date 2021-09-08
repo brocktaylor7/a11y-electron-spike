@@ -19,4 +19,7 @@ process.once("loaded", () => {
             listElement.appendChild(newListItem);
         }
     });
+    ipcRenderer.on("resetElementsList", (event) => {
+        document.getElementById("focused-elements-list").innerHTML = "";
+    });
 });

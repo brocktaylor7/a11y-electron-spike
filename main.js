@@ -8,7 +8,7 @@ const {
 } = require("electron");
 const path = require("path");
 
-const focusedElements = [];
+let focusedElements = [];
 
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,7 +39,8 @@ function createBrowserView(browserWindow) {
         horizontal: true,
         vertical: true,
     });
-    view.webContents.loadURL("https://usu.edu");
+    // view.webContents.loadURL("https://usu.edu");
+    view.webContents.loadURL("http://www.usu.edu/about/");
     // view.webContents.loadURL("https://accessibilityinsights.io");
     return view;
 }
@@ -92,6 +93,11 @@ app.whenReady().then(async () => {
         testPageView.webContents.focus();
         sendTabEventToTestPage(testPageView.webContents);
         // testPageView.webContents.openDevTools({ mode: "detach" });
+    });
+
+    testPageView.webContents.on("did-start-navigation", async () => {
+        focusedElements = [];
+        mainWindow.webContents.send("resetElementsList");
     });
 
     app.on("activate", function () {
